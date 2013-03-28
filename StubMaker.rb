@@ -7,7 +7,7 @@ return value), but it can satisfy scripts that require these modules/methods.
 Usage:
 
 file = File.expand_path("sketchup.rb")
-File.open($file,"w"){|f|
+File.open(file,"w"){|f|
   f.puts(StubMaker.dump(Sketchup))
   4.times{f.puts ""}
   f.puts(StubMaker.dump(Geom))
