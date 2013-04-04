@@ -89,7 +89,7 @@ class StubMaker
         if value.is_a?(Module)
           nested_mods << value
         else
-          add_line("#{constant} = #{value}")
+          add_line("#{constant} = #{value.inspect}")
         end
       }
       add_line
@@ -100,7 +100,7 @@ class StubMaker
     if !class_variables.empty?
       add_line("# Class variables")
       class_variables.sort.each{|variable|
-        add_line("@@#{variable} = #{mod.class_variable_get(variable)}")
+        add_line("@@#{variable} = #{mod.class_variable_get(variable).inspect}")
       }
       add_line
     end
