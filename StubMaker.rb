@@ -65,9 +65,10 @@ class StubMaker
     included_constants = []
     included_methods = []
     included_instance_methods = []
-    # Included modules, but not those of a superclass.
+    # Included modules, but not those of a superclass or of nested modules.
     included = mod.included_modules
     included -= mod.superclass.included_modules if mod.is_a?(Class) && mod.superclass
+    included.delete_if{ |m| m.name == @nesting.split("::") }
     if !included.empty?
       included.reverse.each{|included_mod|
         add_line("include #{included_mod.name}")
