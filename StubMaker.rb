@@ -103,7 +103,7 @@ class StubMaker
     if !class_variables.empty?
       add_line("# Class variables")
       class_variables.sort.each{|variable|
-        add_line("@@#{variable} = #{mod.class_variable_get(variable).inspect}")
+        add_line("#{variable} = #{mod.__send__(:class_variable_get, variable).inspect}")
       }
       add_line
     end
