@@ -109,7 +109,7 @@ class StubMaker
     end
 
     # Class/module methods
-    class_methods = mod.methods - included_methods - Object.methods
+    class_methods = mod.public_methods - included_methods - Object.public_methods
     if !class_methods.empty?
       add_line("# Class methods")
       class_methods.sort.each{|methodname|
@@ -119,11 +119,35 @@ class StubMaker
     end
 
     # Instance methods
-    instance_methods = mod.instance_methods - included_instance_methods - Object.instance_methods
-    if !instance_methods.empty?
+    pub_instance_methods = mod.public_instance_methods(false) # mod.public_instance_methods - included_instance_methods - Object.public_instance_methods
+    if !pub_instance_methods.empty?
       add_line("# Instance methods")
-      instance_methods.sort.each{|methodname|
+      pub_instance_methods.sort.each{|methodname|
         dump_method(methodname, mod.instance_method(methodname))
+        add_line
+      }
+    end
+
+    # Protected instance methods
+    prot_instance_methods = mod.protected_instance_methods - included_instance_methods - Object.protected_instance_methods
+    if !prot_instance_methods.empty?
+      add_line("# Protected instance methods")
+      add_line()
+      prot_instance_methods.sort.each{|methodname|
+        dump_method(methodname, mod.instance_method(methodname))
+        add_line("protected :#{methodname}")
+        add_line
+      }
+    end
+
+    # Private instance methods
+    priv_instance_methods = mod.private_instance_methods - included_instance_methods - Object.private_instance_methods
+    if !priv_instance_methods.empty?
+      add_line("# Private instance methods")
+      add_line()
+      priv_instance_methods.sort.each{|methodname|
+        dump_method(methodname, mod.instance_method(methodname))
+        add_line("private :#{methodname}")
         add_line
       }
     end
