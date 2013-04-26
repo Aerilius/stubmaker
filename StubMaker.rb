@@ -13,6 +13,8 @@ File.open(file,"w"){|f|
   f.puts(StubMaker.dump(Geom))
   4.times{f.puts ""}
   f.puts(StubMaker.dump(UI))
+  4.times{f.puts ""}
+  f.puts(StubMaker.dump(SketchupExtension))
 }
 =end
 
