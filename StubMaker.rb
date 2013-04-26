@@ -82,18 +82,22 @@ class StubMaker
     end
 
     # Constants
-    constants = mod.constants - included_constants
+    constants = mod.constants.sort - included_constants
     # Collect and exclude constants that are nested modules (or classes).
     nested_mods = []
+    constants.each{|constant|
+      value = mod.const_get(constant)
+      if value.is_a?(Module)
+        nested_mods << value
+        constants.delete(constant)
+      end
+    }
+    # Write all remaining constants.
     if !constants.empty?
       add_line("# Constants")
-      constants.sort.each{|constant| # TODO: includes included modules' constants
+      constants.each{|constant|
         value = mod.const_get(constant)
-        if value.is_a?(Module)
-          nested_mods << value
-        else
-          add_line("#{constant} = #{value.inspect}")
-        end
+        add_line("#{constant} = #{value.inspect}")
       }
       add_line
     end
