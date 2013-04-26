@@ -49,7 +49,7 @@ class StubMaker
   # Walks through the contents of a module and generates correspsonding code.
   def dump_module(mod)
     # Module / Class declaration
-    modulename = mod.name.sub(@nesting+"::", "")
+    modulename = mod.name.sub(/^#{@nesting}\:\:/, "")
     # Class
     if mod.is_a?(Class)
       superclass = mod.superclass
